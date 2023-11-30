@@ -1,0 +1,28 @@
+{
+  "name": "d2g",
+  "description": "A designer with isolation using iframes.",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@vant/icons": "^3.0.2",
+    "sortablejs": "^1.15.0",
+    "vant": "^4.8.0",
+    "vue": "^3.2.47",
+    "vue-router": "^4.2.5"
+  },
+  "devDependencies": {
+    "@types/sortablejs": "^1.15.7",
+    "@vitejs/plugin-vue": "^4.1.0",
+    "sass": "^1.69.5",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.2",
+    "vue-tsc": "^1.4.2"
+  }
+}
