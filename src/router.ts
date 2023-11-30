@@ -4,6 +4,7 @@ import Designer from "./views/Designer.vue";
 import Preview from "./views/Preview.vue";
 
 const routes = [
+  { path: "/", redirect: "/designer" },
   { path: "/designer", component: Designer },
   { path: "/preview", component: Preview },
 ];
