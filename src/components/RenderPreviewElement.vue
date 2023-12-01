@@ -3,25 +3,40 @@
     <div
       class="preview-item-mark"
       :style="{ width: rect?.width + 'px', height: rect?.height + 'px' }"
+      v-if="!isChildren"
     ></div>
-    <RenderElementVue :element="element" ref="elementEl" />
+    <RenderElementVue :element="element" ref="elementEl">
+      <template v-if="isChildren && element.children">
+        <RenderPreview v-model:data="element.children" />
+      </template>
+    </RenderElementVue>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { RenderElement } from "../models/element";
 import RenderElementVue from "./RenderElement.vue";
-
-defineProps<{
+const props = defineProps<{
   element: RenderElement;
 }>();
+// slots
+const slots = defineSlots();
+
+const isChildren = computed(() => {
+  return !!props.element?.children?.length;
+});
 
 const elementEl = ref<InstanceType<typeof RenderElementVue> | null>(null);
 const rect = ref<DOMRect | null>(null);
 
 onMounted(() => {
-  const rects = elementEl.value?.$el?.getClientRects();
+  // console.log('elementEl.value?.$el', elementEl.value?.$el);
+  const el = elementEl.value?.$el;
+  if (!(el instanceof HTMLElement)) {
+    return 
+  }
+  const rects = el?.getClientRects();
   rect.value = rects?.[0]?.toJSON();
 });
 </script>

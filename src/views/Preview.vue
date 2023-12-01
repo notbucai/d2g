@@ -1,19 +1,12 @@
 <template>
   <div class="preview-container">
-    <div class="preview-list" ref="previewListRef" :key="keyId">
-      <template v-for="item in list" :key="item.id">
-        <RenderPreviewElement :element="item" />
-      </template>
-    </div>
+    <RenderPreview v-model:data="list" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import RenderPreviewElement from "../components/RenderPreviewElement.vue";
+import { ref } from "vue";
 import { RenderElement } from "../models/element";
-
-const previewListRef = ref<HTMLElement | null>(null);
 
 const list = ref<RenderElement[]>([
   new RenderElement(
@@ -26,6 +19,31 @@ const list = ref<RenderElement[]>([
       editable: false,
     },
     []
+  ),
+  new RenderElement(
+    "1sss",
+    "div",
+    {
+      style: {
+        width: "100%",
+        minHeight: "100px",
+        backgroundColor: "#409eff",
+      },
+    },
+    [
+      new RenderElement(
+        "1555",
+        "div",
+        {
+          style: {
+            width: "100px",
+            height: "100px",
+            backgroundColor: "#67c23a",
+          },
+        },
+        []
+      ),
+    ]
   ),
   new RenderElement(
     "1",
@@ -55,56 +73,6 @@ const list = ref<RenderElement[]>([
     []
   ),
 ]);
-
-const keyId = ref(1);
-
-onMounted(() => {
-  const parentWindow = window.parent;
-  if (!parentWindow) return;
-  // postMessage init
-  window.onmessage = (evt) => {
-    const { data } = evt;
-
-    if (data.type === "move") {
-      console.log("move");
-
-      const { oldIndex, newIndex } = data;
-      if (oldIndex === undefined) return;
-      if (newIndex === undefined) return;
-      if (oldIndex === newIndex) return;
-      console.log("oldIndex", oldIndex, "newIndex", newIndex);
-      const listValue = list.value;
-      const item = listValue.splice(oldIndex, 1)[0];
-
-      if (item) {
-        listValue.splice(newIndex, 0, item);
-        list.value = [...listValue];
-        keyId.value = keyId.value + 1;
-        parentWindow.postMessage("init");
-      }
-    } else if (data.type === "add") {
-      console.log("add");
-
-      const { index, element } = data;
-      if (index === undefined) return;
-      if (element === undefined) return;
-
-      const listValue = [...list.value];
-      listValue.splice(
-        index,
-        0,
-        new RenderElement(Math.random().toString(), element, {}, [])
-      );
-      list.value = listValue;
-      keyId.value = keyId.value + 1;
-      parentWindow.postMessage("init");
-    }
-  };
-
-  setTimeout(() => {
-    parentWindow.postMessage("init");
-  }, 100);
-});
 </script>
 
 <style lang="scss" scoped>

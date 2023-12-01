@@ -1,10 +1,6 @@
 <template>
   <component :is="element.element" v-bind="element.attrs || {}">
-    <template v-if="element.children">
-      <template v-for="child in element.children" :key="child">
-        <span>{{ child }}</span>
-      </template>
-    </template>
+    <slot></slot>
   </component>
 </template>
 

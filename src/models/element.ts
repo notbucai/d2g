@@ -2,13 +2,13 @@ export class RenderElement {
   id: string;
   element: string;
   attrs?: Record<string, unknown>;
-  children?: (RenderElement | String)[];
+  children?: RenderElement[];
 
   constructor(
     id: string,
     element: string,
     attrs?: Record<string, unknown>,
-    children?: (RenderElement | String)[]
+    children?: RenderElement[]
   ) {
     this.id = id;
     this.element = element;

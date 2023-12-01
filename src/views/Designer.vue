@@ -1,11 +1,13 @@
 <template>
   <div class="designer-container">
-    <div class="componentList" ref="componentListRef">
+    <div class="component-list" ref="componentListRef">
       <div
         class="component-item"
         v-for="item in list"
         :key="item.element"
         data-type="component"
+        :data-element="item.element"
+        :data-name="item.name"
       >
         <div class="component-info">
           <div class="component-info-icon"><ElIconSetting /></div>
@@ -29,7 +31,9 @@
 
 <script setup lang="ts">
 import Sortable from "sortablejs";
-import { computed, onMounted, ref } from "vue";
+import { onMounted, ref } from "vue";
+
+(window as any).Sortable = Sortable;
 
 const componentListRef = ref<HTMLElement | null>(null);
 const previewEl = ref<HTMLIFrameElement | null>(null);
@@ -56,9 +60,9 @@ const list = ref([
   },
 ]);
 
-const previewWindow = computed(() => {
-  return previewEl.value?.contentWindow;
-});
+// const previewWindow = computed(() => {
+//   return previewEl.value?.contentWindow;
+// });
 
 onMounted(() => {
   if (!componentListRef.value) return;
@@ -74,59 +78,7 @@ onMounted(() => {
 });
 
 const onLoadIframe = () => {
-  if (!previewWindow.value) return;
-  const previewDocument = previewWindow.value.document;
-  window.onmessage = (evt) => {
-    const { data } = evt;
-    if (data === "init") {
-      console.log("init");
-      const previewListEl =
-        previewDocument.querySelector<HTMLElement>(".preview-list");
-      // console.log("previewListEl", previewListEl);
-      if (!previewListEl) return;
-
-      new Sortable(previewListEl, {
-        animation: 150,
-        ghostClass: "preview-ghost",
-        group: "d2g",
-        onAdd(evt) {
-          previewWindow.value?.postMessage(
-            {
-              type: "add",
-              element: list.value[evt.oldIndex ?? 0].element,
-              index: evt.newIndex,
-            },
-            "*"
-          );
-        },
-        onMove(evt, originalEvent) {
-          console.log(evt, originalEvent);
-        },
-        onChange(evt) {
-          console.log(evt);
-        },
-        onUpdate(event) {
-          console.log("update", event);
-        },
-        onEnd(evt) {
-          console.log(evt);
-          const { oldIndex, newIndex } = evt;
-          if (oldIndex === undefined) return;
-          if (newIndex === undefined) return;
-          if (oldIndex === newIndex) return;
-
-          previewWindow.value?.postMessage(
-            {
-              type: "move",
-              oldIndex,
-              newIndex,
-            },
-            "*"
-          );
-        },
-      });
-    }
-  };
+  console.log("onLoadIframe");
 };
 </script>
 
@@ -135,10 +87,14 @@ const onLoadIframe = () => {
 .designer-container {
   display: flex;
 }
+.component-list {
+  padding-top: 50px;
+}
 .preview-iframe {
   width: 340px;
   height: 700px;
-  border: 1px solid #ccc;
+  border: 4px dashed #ccc;
+  margin: 60px;
   iframe {
     width: 100%;
     height: 100%;

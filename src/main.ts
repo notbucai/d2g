@@ -9,9 +9,13 @@ import vant from "vant";
 
 import "vant/lib/index.css";
 
+import RenderPreview from "./components/RenderPreview.vue";
+
 const app = createApp(App);
 
 app.use(vant);
+
+app.component("RenderPreview", RenderPreview);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component("ElIcon" + key, component);
