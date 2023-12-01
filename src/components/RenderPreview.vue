@@ -1,7 +1,7 @@
 <template>
   <div class="preview-list" ref="previewListRef" :key="keyId">
     <template v-for="item in list" :key="keyId + item.id">
-      <RenderPreviewElement :element="item" @change="onChangeItem(item, $event)" />
+      <RenderPreviewElement :element="item" @change-element="onChangeItem(item, $event)" />
     </template>
   </div>
 </template>
@@ -47,8 +47,8 @@ const onChangeItem = (item: RenderElement, value: RenderElement) => {
 };
 
 const renderSortable = async () => {
-  if (!previewListRef.value) return;
-
+  console.log('renderSortable');
+  
   const parentWindow = window.parent;
   if (!parentWindow) return;
   const Sortable = (parentWindow as any).Sortable as typeof SortableType;
@@ -62,11 +62,17 @@ const renderSortable = async () => {
     }, 0);
   });
 
+  if (!previewListRef.value) return;
+  
   sortable = Sortable.create(previewListRef.value, {
-    animation: 150,
+    // bug: https://github.com/SortableJS/Sortable/issues/1707
+    // fix: 约等于没有解决
+    animation: 0,
     ghostClass: "preview-ghost",
     group: "d2g",
     forceAutoScrollFallback: true,
+    fallbackOnBody: true,
+    fallbackTolerance: 0,
     onAdd(evt) {
       const { item, newIndex } = evt;
       const dataset = item.dataset;
@@ -82,8 +88,8 @@ const renderSortable = async () => {
 
       renderSortable();
     },
-    onMove(evt, originalEvent) {
-      console.log(evt, originalEvent);
+    onMove(evt) {
+      console.log(evt);
       // 如果来源不是自己或组件库，则禁止拖拽
       if (evt.from !== evt.to) {
         return false;

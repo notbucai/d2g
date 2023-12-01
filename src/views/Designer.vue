@@ -88,13 +88,13 @@ const onLoadIframe = () => {
   display: flex;
 }
 .component-list {
-  padding-top: 50px;
+  padding-top: 30px;
 }
 .preview-iframe {
   width: 340px;
   height: 700px;
   border: 4px dashed #ccc;
-  margin: 60px;
+  margin: 40px;
   iframe {
     width: 100%;
     height: 100%;

@@ -6,8 +6,8 @@
       v-if="!isChildren"
     ></div>
     <RenderElementVue :element="element" ref="elementEl">
-      <template v-if="isChildren && element.children">
-        <RenderPreview v-model:data="element.children" />
+      <template v-if="isChildren && elementChildren">
+        <RenderPreview v-model:data="elementChildren" :key="element.id" />
       </template>
     </RenderElementVue>
   </div>
@@ -20,11 +20,21 @@ import RenderElementVue from "./RenderElement.vue";
 const props = defineProps<{
   element: RenderElement;
 }>();
-// slots
-const slots = defineSlots();
+const emit = defineEmits<{
+  (event: "change-element", value: RenderElement): void;
+}>();
+
+const elementChildren = computed({
+  get() {
+    return props.element.children;
+  },
+  set(value) {
+    props.element.children = value;
+  },
+});
 
 const isChildren = computed(() => {
-  return !!props.element?.children?.length;
+  return !!elementChildren.value?.length;
 });
 
 const elementEl = ref<InstanceType<typeof RenderElementVue> | null>(null);

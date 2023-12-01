@@ -10,7 +10,7 @@ import { RenderElement } from "../models/element";
 
 const list = ref<RenderElement[]>([
   new RenderElement(
-    "1",
+    "1shdhfgh",
     "van-contact-card",
     {
       name: "张三",
@@ -31,22 +31,22 @@ const list = ref<RenderElement[]>([
       },
     },
     [
+      new RenderElement("1cvxbx", "van-pagination", {}, []),
       new RenderElement(
-        "1555",
-        "div",
+        "1shdhfgh",
+        "van-contact-card",
         {
-          style: {
-            width: "100px",
-            height: "100px",
-            backgroundColor: "#67c23a",
-          },
+          name: "张三",
+          tel: "13000000000",
+          address: "浙江省杭州市西湖区文三路 138 号",
+          editable: false,
         },
         []
       ),
     ]
   ),
   new RenderElement(
-    "1",
+    "xxx1",
     "van-card",
     {
       thumb: "https://img.yzcdn.cn/vant/apple-1.jpg",
@@ -62,10 +62,10 @@ const list = ref<RenderElement[]>([
     },
     []
   ),
-  new RenderElement("1", "van-uploader", {}, []),
-  new RenderElement("1", "van-pagination", {}, []),
+  new RenderElement("1sfg", "van-uploader", {}, []),
+  new RenderElement("1cvxbx", "van-pagination", {}, []),
   new RenderElement(
-    "1",
+    "ggsdfg1",
     "van-empty",
     {
       description: "描述文字",
