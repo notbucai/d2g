@@ -13,7 +13,7 @@ const data = useDataStore();
 watch(
   () => data.nodes,
   () => {
-    console.log(JSON.stringify(data.nodes, null, 2));
+    console.log(JSON.stringify(data.nodes));
   },
   {
     deep: true,

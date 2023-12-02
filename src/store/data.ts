@@ -1,8 +1,11 @@
 import { defineStore } from "pinia";
 import { RenderElement } from "../models/element";
 
+import { flattenDeep } from 'lodash';
+
 export const useDataStore = defineStore("data", {
   state: () => ({
+    selectionId: null as string | null,
     nodes: [
       new RenderElement(
         "1shdhfgh",
@@ -26,9 +29,9 @@ export const useDataStore = defineStore("data", {
           },
         },
         [
-          new RenderElement("1cvxbx", "van-pagination", {}, []),
+          new RenderElement("1cvxvvvbx", "van-pagination", {}, []),
           new RenderElement(
-            "1shdhfgh",
+            "1shdghdfdhffhfgh",
             "van-contact-card",
             {
               name: "张三",
@@ -70,9 +73,25 @@ export const useDataStore = defineStore("data", {
     ] as RenderElement[],
   }),
 
+  getters: {
+    flatNodes(): RenderElement[] {
+      return flattenDeep(this.nodes);
+    },
+    selection(): RenderElement | undefined {
+      // 存在多层问题
+      const nodes = this.flatNodes;
+      const selection = nodes.find((node) => node.id === this.selectionId);
+      return selection;
+    },
+  },
+
   actions: {
     updaeNodes(nodes: RenderElement[]) {
       this.nodes = nodes;
+    },
+    updateSelectionId(id: string | null) {
+      console.log('id', id);
+      this.selectionId = id;
     },
   },
 });
