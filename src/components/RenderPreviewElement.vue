@@ -4,6 +4,7 @@
       class="preview-item-mark"
       :style="{ width: rect?.width + 'px', height: rect?.height + 'px' }"
       :class="{ 'is-active': isActive }"
+      v-if="!isChildren || isActive"
     >
       <!-- 删除就不放在这里了 -->
       <!-- <div class="preview-item-mark-del">
@@ -23,6 +24,7 @@ import { computed, onMounted, ref } from "vue";
 import { RenderElement } from "../models/element";
 import RenderElementVue from "./RenderElement.vue";
 import { useDataStore } from "../store/data";
+import { onUnmounted } from "vue";
 
 const useData = useDataStore();
 
@@ -52,14 +54,33 @@ const isActive = computed(() => {
 const elementEl = ref<InstanceType<typeof RenderElementVue> | null>(null);
 const rect = ref<DOMRect | null>(null);
 
-onMounted(() => {
-  // console.log('elementEl.value?.$el', elementEl.value?.$el);
+const resize = () => {
   const el = elementEl.value?.$el;
   if (!(el instanceof HTMLElement)) {
+    return false;
+  }
+  const rects = el.getClientRects();
+  rect.value = rects?.[0]?.toJSON();
+  return true;
+};
+
+let resizeObserver: ResizeObserver;
+
+onMounted(() => {
+  const status = resize();
+  if (!status) {
     return;
   }
-  const rects = el?.getClientRects();
-  rect.value = rects?.[0]?.toJSON();
+  const el = elementEl.value?.$el;
+  // change size
+  resizeObserver = new ResizeObserver(() => {
+    resize();
+  });
+  resizeObserver.observe(el);
+});
+
+onUnmounted(() => {
+  resizeObserver?.disconnect();
 });
 
 const onClick = () => {
@@ -69,7 +90,6 @@ const onClick = () => {
   }
   useData.updateSelectionId(id);
 };
-
 </script>
 
 <style lang="scss" scoped>
