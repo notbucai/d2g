@@ -100,12 +100,16 @@ onMounted(() => {
 .component-list {
   flex: 1;
   background-color: #fafafa;
+  overflow-y: auto;
+  overflow-x: hidden;
   .component-item {
     box-sizing: border-box;
-    padding: 6px 12px;
-    margin: 6px 0;
+    padding: 10px 12px;
+    margin: 6px 12px;
     user-select: none;
     cursor: move;
+    background-color: #fff;
+    border-radius: 4px;
     .component-info {
       display: flex;
       align-items: center;
