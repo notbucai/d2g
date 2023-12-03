@@ -13,11 +13,14 @@ import "vant/lib/index.css";
 
 import RenderPreview from "./components/RenderPreview.vue";
 
+import packages from "./packages";
+
 const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
 app.use(vant);
+app.use(packages);
 app.component("RenderPreview", RenderPreview);
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
