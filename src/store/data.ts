@@ -60,7 +60,6 @@ export const useDataStore = defineStore("data", {
         },
         []
       ),
-      new RenderElement("1sfg", "van-uploader", {}, []),
       new RenderElement("1cvxbx", "van-pagination", {}, []),
       new RenderElement(
         "ggsdfg1",

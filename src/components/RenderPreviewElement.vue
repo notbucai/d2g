@@ -5,12 +5,7 @@
       :style="{ width: rect?.width + 'px', height: rect?.height + 'px' }"
       :class="{ 'is-active': isActive }"
       v-if="!isChildren || isActive"
-    >
-      <!-- 删除就不放在这里了 -->
-      <!-- <div class="preview-item-mark-del">
-        <ElIconClose />
-      </div> -->
-    </div>
+    ></div>
     <RenderElementVue :element="element" ref="elementEl">
       <template v-if="isChildren && elementChildren">
         <RenderPreview v-model:data="elementChildren" :key="element.id" />
@@ -98,26 +93,10 @@ const onClick = () => {
   z-index: 10;
   background-color: rgba($color: #fff, $alpha: 0.2);
   box-sizing: border-box;
-  // .preview-item-mark-del {
-  //   display: none;
-  //   position: absolute;
-  //   right: -8px;
-  //   top: -8px;
-  //   width: 16px;
-  //   height: 16px;
-  //   cursor: pointer;
-  //   background-color: rgba($color: #409eff, $alpha: .1);
-  //   border: 1px solid #409eff;
-  //   color: #409eff;
-  //   border-radius: 50%;
-  // }
   &:hover,
   &.is-active {
     border: 2px dashed rgba($color: #409eff, $alpha: 0.5);
     background-color: rgba($color: #fff, $alpha: 0.5);
-    // .preview-item-mark-del {
-    //   display: block;
-    // }
   }
 }
 </style>

@@ -16,7 +16,9 @@
         :data-name="item.name"
       >
         <div class="component-info">
-          <div class="component-info-icon"><ElIconSetting /></div>
+          <div class="component-info-icon" v-if="item.icon">
+            <component :is="item.icon" />
+          </div>
           <div class="component-info-text">{{ item.name }}</div>
         </div>
         <div class="component-ghost">
@@ -35,24 +37,19 @@ const componentListRef = ref<HTMLElement | null>(null);
 
 const list = ref([
   {
-    name: "地址卡片",
-    element: "van-contact-card",
-  },
-  {
     name: "商品卡片",
     element: "van-card",
-  },
-  {
-    name: "上传",
-    element: "van-uploader",
+    icon: "el-icon-postcard",
   },
   {
     name: "分页",
     element: "van-pagination",
+    icon: "el-icon-reading",
   },
   {
     name: "空状态",
     element: "van-empty",
+    icon: "el-icon-circle-plus",
   },
 ]);
 
