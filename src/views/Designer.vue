@@ -1,81 +1,34 @@
 <template>
   <div class="designer-container">
-    <div class="component-list" ref="componentListRef">
-      <div
-        class="component-item"
-        v-for="item in list"
-        :key="item.element"
-        data-type="component"
-        :data-element="item.element"
-        :data-name="item.name"
-      >
-        <div class="component-info">
-          <div class="component-info-icon"><ElIconSetting /></div>
-          <div class="component-info-text">{{ item.name }}</div>
-        </div>
-        <div class="component-ghost">
-          <div class="component-ghost-text">放在这里</div>
-        </div>
+    <HeaderNav />
+
+    <div class="designer-main">
+      <ComponentSide />
+      <div class="preview-iframe">
+        <iframe
+          src="/#/preview"
+          frameborder="0"
+          ref="previewEl"
+          @load="onLoadIframe"
+        ></iframe>
       </div>
+      <ConfigurationSide />
     </div>
-    <div class="preview-iframe">
-      <iframe
-        src="/#/preview"
-        frameborder="0"
-        ref="previewEl"
-        @load="onLoadIframe"
-      ></iframe>
-    </div>
+    
   </div>
 </template>
 
 <script setup lang="ts">
 import Sortable from "sortablejs";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
+
+import HeaderNav from "../layout/designer/HeaderNav.vue";
+import ComponentSide from "../layout/designer/ComponentSide.vue";
+import ConfigurationSide from "../layout/designer/ConfigurationSide.vue";
 
 (window as any).Sortable = Sortable;
 
-const componentListRef = ref<HTMLElement | null>(null);
 const previewEl = ref<HTMLIFrameElement | null>(null);
-const list = ref([
-  {
-    name: "地址卡片",
-    element: "van-contact-card",
-  },
-  {
-    name: "商品卡片",
-    element: "van-card",
-  },
-  {
-    name: "上传",
-    element: "van-uploader",
-  },
-  {
-    name: "分页",
-    element: "van-pagination",
-  },
-  {
-    name: "空状态",
-    element: "van-empty",
-  },
-]);
-
-// const previewWindow = computed(() => {
-//   return previewEl.value?.contentWindow;
-// });
-
-onMounted(() => {
-  if (!componentListRef.value) return;
-  Sortable.create(componentListRef.value, {
-    animation: 150,
-    sort: false,
-    group: {
-      name: "d2g",
-      pull: "clone",
-      put: false,
-    },
-  });
-});
 
 const onLoadIframe = () => {
   console.log("onLoadIframe");
@@ -83,18 +36,26 @@ const onLoadIframe = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../assets/designer.scss";
 .designer-container {
   display: flex;
-}
-.component-list {
-  padding-top: 30px;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  .designer-main {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    flex-direction: row;
+    overflow: hidden;
+  }
 }
 .preview-iframe {
-  width: 340px;
-  height: 700px;
-  border: 4px dashed #ccc;
-  margin: 40px;
+  width: 375px;
+  height: 667px;
+  box-shadow: 0 0 12px rgba(150, 150, 150, 0.1);
+  // border: 2px solid #fff;
+  margin-top: 24px;
   iframe {
     width: 100%;
     height: 100%;

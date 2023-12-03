@@ -22,6 +22,10 @@ watch(
 
 </script>
 
-<style lang="scss" scoped>
-@import "../assets/designer.scss";
+<style lang="scss">
+@import "../assets/ghost.scss";
+.preview-container {
+  min-height: 100vh;
+  background-color: #fff;
+}
 </style>
