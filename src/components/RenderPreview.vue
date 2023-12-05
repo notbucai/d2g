@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list" ref="previewListRef" :key="keyId" :style="style">
+  <div class="preview-list" ref="previewListRef" :class="{empty: !list?.length}" :key="keyId" :style="style">
     <template v-for="item in list" :key="item.id">
       <RenderPreviewElement
         :element="item"
@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref, onMounted, StyleValue } from "vue";
 import RenderPreviewElement from "../components/RenderPreviewElement.vue";
-import { RenderElement } from "../models/element";
+import { ElementType, IRenderElement } from "../models/element";
 import SortableType from "sortablejs";
 import { computed } from "vue";
 import { getComponents } from "../packages";
@@ -20,12 +20,12 @@ import { getComponents } from "../packages";
 const previewListRef = ref<HTMLElement | null>(null);
 
 const props = defineProps<{
-  data: RenderElement[];
+  data: IRenderElement[];
   style?: StyleValue;
 }>();
 
 const emit = defineEmits<{
-  (event: "update:data", value: RenderElement[]): void;
+  (event: "update:data", value: IRenderElement[]): void;
 }>();
 
 const list = computed({
@@ -41,7 +41,7 @@ const keyId = ref(1);
 
 let sortable: SortableType | null = null;
 
-const onChangeItem = (item: RenderElement, value: RenderElement) => {
+const onChangeItem = (item: IRenderElement, value: IRenderElement) => {
   const listValue = [...list.value];
   const index = listValue.findIndex((v) => v.id === item.id);
   if (index === -1) return;
@@ -89,7 +89,13 @@ const renderSortable = async () => {
 
       const config = components.find((v) => v.element === element);
 
-      const re = new RenderElement(Math.random().toString(), element, config?.data ?? {}, []);
+      const re = {
+        id: Math.random().toString(),
+        type: config?.type ?? ElementType.Component,
+        element,
+        data: config?.data ?? {},
+        children: {},
+      } as IRenderElement;
       const listValue = [...list.value];
       listValue.splice(newIndex, 0, re);
 
@@ -131,4 +137,13 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.preview-list {
+  &.empty {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #999;
+    border: 1px dashed #ccc;
+  }
+}
 </style>

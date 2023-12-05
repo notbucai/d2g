@@ -1,5 +1,6 @@
 import { Rule } from "@form-create/element-ui";
 import { App } from "vue";
+import { ElementType } from "../models/element";
 
 export interface IComponent {
   name: string;
@@ -8,6 +9,7 @@ export interface IComponent {
   icon?: string;
   forms?: Rule[];
   data?: any;
+  type?: ElementType;
 }
 
 // export vue3 plugin

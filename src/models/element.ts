@@ -1,18 +1,12 @@
-export class RenderElement {
+export enum ElementType {
+  Layout = 'layout',
+  Component = 'component',
+}
+
+export interface IRenderElement {
   id: string;
   element: string;
+  type?: ElementType; // 元素类型
   attrs?: Record<string, unknown>;
-  children?: RenderElement[];
-
-  constructor(
-    id: string,
-    element: string,
-    attrs?: Record<string, unknown>,
-    children?: RenderElement[]
-  ) {
-    this.id = id;
-    this.element = element;
-    this.attrs = attrs;
-    this.children = children;
-  }
+  children?: Record<string, IRenderElement[]>;
 }

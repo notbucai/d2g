@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { RenderElement } from "../models/element";
+import { ElementType, IRenderElement } from "../models/element";
 
 import { flattenDeep } from "lodash";
 
@@ -7,44 +7,49 @@ export const usePreviewStore = defineStore("preview", {
   state: () => ({
     selectionId: null as string | null,
     nodes: [
-      new RenderElement(
-        "test",
-        "d2g-banner",
-        {
+      {
+        id: "test",
+        element: "d2g-banner",
+        attrs: {
           list: [],
         },
-        []
-      ),
-    ],
+        children: {},
+      },
+      {
+        id: "test2",
+        element: "d2g-tabs",
+        type: ElementType.Layout,
+        attrs: {
+          tabs:[
+            {
+              name: 'test',
+            },
+            {
+              name: 'test2',
+            },
+          ],
+        },
+        children: {},
+      }
+    ] as IRenderElement[],
+
+    selection: null as IRenderElement | null,
   }),
 
-  getters: {
-    flatNodes: (state) => {
-      return flattenDeep(state.nodes);
-    },
-
-    selection(state): RenderElement | null {
-      // 存在多层问题
-      const nodes = this.flatNodes;
-      const selectionId = state.selectionId;
-      const selection = nodes.find((node) => node.id === selectionId);
-      return selection || null;
-    },
-  },
-
   actions: {
-    updateNodes(nodes: RenderElement[]) {
+    updateNodes(nodes: IRenderElement[]) {
       this.nodes = nodes;
     },
-    updateSelectionId(id: string | null) {
-      this.selectionId = id;
+    selectNode(node?: IRenderElement) {
+      this.selectionId = node?.id || null;
+      this.selection = node || null;
     },
-    updateNode(id: string, attr: any) {
-      const nodes = this.flatNodes;
-      const selection = nodes.find((node) => node.id === id);
-      if (selection) {
-        selection.attrs = attr;
+    updateSelectionNode(node: IRenderElement) {
+      if(!this.selection){
+        console.warn('updateSelectionNode: no selection');
+        return;
       }
+      this.selection.attrs = node.attrs;
     },
   },
 });

@@ -15,7 +15,7 @@ window.addEventListener("message", (e) => {
   const type = e.data?.type;
   const data = e.data?.data;
   if (type === "update-node-config") {
-    useData.updateNode(data?.id, data?.attrs);
+    useData.updateSelectionNode(data);
   }
 });
 
@@ -32,7 +32,7 @@ watch(
 watch(
   () => useData.selection,
   (selection) => {
-    // console.log("selection", selection, parentWindow);
+    console.log("selection -> ", selection, parentWindow);
     parentWindow.postMessage(
       {
         type: "selection",

@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import { RenderElement } from "../models/element";
+import { IRenderElement } from "../models/element";
 
 export const useDesignerStore = defineStore("designer", {
   state: () => ({
     previewWindow: null as Window | null,
-    selection: null as RenderElement | null,
+    selection: null as IRenderElement | null,
   }),
 
   getters: {},
@@ -13,10 +13,10 @@ export const useDesignerStore = defineStore("designer", {
     setPreviewWindow(window: Window) {
       this.previewWindow = window;
     },
-    setSelection(selection: RenderElement | null) {
+    setSelection(selection: IRenderElement | null) {
       this.selection = selection;
     },
-    updateNode(node: RenderElement) {
+    updateNode(node: IRenderElement) {
       this.setSelection(node);
       const previewWindow = this.previewWindow;
       // postMessage

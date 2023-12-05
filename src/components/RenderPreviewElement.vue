@@ -4,19 +4,15 @@
       class="preview-item-mark"
       :style="{ width: rect?.width + 'px', height: rect?.height + 'px' }"
       :class="{ 'is-active': isActive }"
-      v-if="!isChildren || isActive"
+      v-if="!isLayout || isActive"
     ></div>
-    <RenderElementVue :element="element" ref="elementEl">
-      <template v-if="isChildren && elementChildren">
-        <RenderPreview v-model:data="elementChildren" :key="element.id" />
-      </template>
-    </RenderElementVue>
+    <RenderElementVue :element="element" ref="elementEl" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed, onMounted, ref } from "vue";
-import { RenderElement } from "../models/element";
+import { ElementType, IRenderElement } from "../models/element";
 import RenderElementVue from "./RenderElement.vue";
 import { usePreviewStore } from "../store/preview";
 import { onUnmounted } from "vue";
@@ -24,24 +20,17 @@ import { onUnmounted } from "vue";
 const useData = usePreviewStore();
 
 const props = defineProps<{
-  element: RenderElement;
+  element: IRenderElement;
 }>();
 const emit = defineEmits<{
-  (event: "change-element", value: RenderElement): void;
+  (event: "change-element", value: IRenderElement): void;
 }>();
 
-const elementChildren = computed({
-  get() {
-    return props.element.children;
-  },
-  set(value) {
-    props.element.children = value;
-  },
+
+const isLayout = computed(() => {
+  return props.element.type === ElementType.Layout;
 });
 
-const isChildren = computed(() => {
-  return !!elementChildren.value?.length;
-});
 const isActive = computed(() => {
   return useData.selectionId === props.element.id;
 });
@@ -79,11 +68,11 @@ onUnmounted(() => {
 });
 
 const onClick = () => {
-  let id = props.element.id || null;
+  let node: IRenderElement | undefined = props.element;
   if (isActive.value) {
-    id = null;
+    node = undefined;
   }
-  useData.updateSelectionId(id);
+  useData.selectNode(node);
 };
 </script>
 

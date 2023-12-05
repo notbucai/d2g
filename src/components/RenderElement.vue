@@ -1,15 +1,12 @@
 <template>
-  <component :is="element.element" v-bind="element.attrs || {}">
-    <slot></slot>
-  </component>
+  <component :is="element.element" v-bind="element.attrs || {}" :children="element.children" />
 </template>
 
 <script lang="ts" setup>
-import { RenderElement } from "../models/element";
+import { IRenderElement } from "../models/element";
 defineProps<{
-  element: RenderElement;
+  element: IRenderElement;
 }>();
-
 </script>
 
 <style lang="scss" scoped></style>
