@@ -2,7 +2,12 @@
   <div class="preview-list-item" @click.stop="onClick">
     <div
       class="preview-item-mark"
-      :style="{ width: rect?.width + 'px', height: rect?.height + 'px' }"
+      :style="{
+        width: rect?.width + 'px',
+        height: rect?.height + 'px',
+        top: rect?.top + 'px',
+        left: rect?.left + 'px',
+      }"
       :class="{ 'is-active': isActive }"
       v-if="!isLayout || isActive"
     ></div>
@@ -25,7 +30,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: "change-element", value: IRenderElement): void;
 }>();
-
 
 const isLayout = computed(() => {
   return props.element.type === ElementType.Layout;

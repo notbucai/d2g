@@ -29,10 +29,29 @@ export const usePreviewStore = defineStore("preview", {
         children: {},
       },
       {
-        id: 'text1',
-        element: 'd2g-text',
+        id: "text1",
+        element: "d2g-text",
         attrs: {
-          text: '测试文本1',
+          text: "测试文本1",
+        },
+      },
+
+      {
+        id: "card-1",
+        element: "d2g-card",
+        attrs: {
+          title: "123123",
+        },
+        children: {
+          card: [
+            {
+              id: "text1",
+              element: "d2g-text",
+              attrs: {
+                text: "测试文本1",
+              },
+            },
+          ],
         },
       },
       {
@@ -52,19 +71,19 @@ export const usePreviewStore = defineStore("preview", {
         children: {
           0: [
             {
-              id: 'textfa',
-              element: 'd2g-text',
+              id: "textfa",
+              element: "d2g-text",
               attrs: {
-                text: '测试文本2',
+                text: "测试文本2",
               },
             },
           ],
           1: [
             {
-              id: 'text77',
-              element: 'd2g-text',
+              id: "text77",
+              element: "d2g-text",
               attrs: {
-                text: '测试文本4',
+                text: "测试文本4",
               },
             },
           ],
