@@ -5,7 +5,7 @@
       :style="{
         width: rect?.width + 'px',
         height: rect?.height + 'px',
-        top: rect?.top + 'px',
+        // top: rect?.top + 'px',
         left: rect?.left + 'px',
       }"
       :class="{ 'is-active': isActive }"
