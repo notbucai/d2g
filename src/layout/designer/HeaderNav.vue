@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="designer-header-nav-right">
-      <div class="designer-header-nav-button">
+      <div class="designer-header-nav-button" @click="handleSave">
         <!-- Save -->
         <span>保存</span>
       </div>
@@ -14,7 +14,14 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ElMessage } from 'element-plus';
+
+const handleSave = () => {
+  ElMessage.success('保存成功');
+}
+
+</script>
 
 <style lang="scss" scoped>
 .designer-header-nav {

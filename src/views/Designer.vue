@@ -41,6 +41,7 @@ watch(previewEl, (el) => {
 
 const onLoadIframe = () => {
   console.log("onLoadIframe");
+  useData.initPreviewData();
 };
 
 window.addEventListener("message", (e) => {
@@ -48,8 +49,11 @@ window.addEventListener("message", (e) => {
   const data = e.data?.data;
   if (type === "selection") {
     useData.setSelection(data);
+  } else if (type === "update-nodes") {
+    useData.setNodes(data);
   }
 });
+
 </script>
 
 <style lang="scss" scoped>

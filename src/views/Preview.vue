@@ -1,6 +1,6 @@
 <template>
   <div class="preview-container">
-    <RenderPreview v-model:data="useData.nodes" style="min-height: 100vh;"></RenderPreview>
+    <RenderPreview v-model:data="useData.nodes" style="min-height: 100vh;" :key="useData.keyId"></RenderPreview>
   </div>
 </template>
 
@@ -14,8 +14,12 @@ const parentWindow = window.parent;
 window.addEventListener("message", (e) => {
   const type = e.data?.type;
   const data = e.data?.data;
+  console.log('preview type', type);
+  
   if (type === "update-node-config") {
     useData.updateSelectionNode(data);
+  } else if (type === "init-preview-data") {
+    useData.updateNodes(data);
   }
 });
 
@@ -23,6 +27,13 @@ watch(
   () => useData.nodes,
   () => {
     console.log(JSON.stringify(useData.nodes));
+    parentWindow.postMessage(
+      {
+        type: "update-nodes",
+        data: JSON.parse(JSON.stringify(useData.nodes)),
+      },
+      "*"
+    );
   },
   {
     deep: true,
