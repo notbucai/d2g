@@ -57,7 +57,7 @@ export const getConfig = (inComponentName: string) => {
   //
   // 例如：test-banner => testBanner
   // 例如：test-banner-1 => testBanner1
-  const name = componentName.replace(/-([a-z])/g, (all, letter) =>
+  const name = componentName.replace(/-([a-z])/g, (_all, letter) =>
     letter.toUpperCase()
   );
 
