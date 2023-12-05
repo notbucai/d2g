@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ElementType, IRenderElement } from "../models/element";
 
-import { flattenDeep } from "lodash";
+// import { flattenDeep } from "lodash";
 
 export const usePreviewStore = defineStore("preview", {
   state: () => ({

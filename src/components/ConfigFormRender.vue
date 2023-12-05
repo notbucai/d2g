@@ -2,6 +2,7 @@
   <div class="config-form-render">
     <form-create
       :name="element + id"
+      :key="element + id"
       :rule="rules"
       v-model:api="fApi"
       :option="options"
