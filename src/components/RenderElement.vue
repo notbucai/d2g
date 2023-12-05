@@ -1,10 +1,14 @@
 <template>
-  <component :is="element.element" v-bind="element.attrs || {}" :children="element.children" />
+  <component
+    :is="element.element"
+    v-bind="element.attrs || {}"
+    :subChildrenMap="props.element.subChildrenMap"
+  />
 </template>
 
 <script lang="ts" setup>
 import { IRenderElement } from "../models/element";
-defineProps<{
+const props = defineProps<{
   element: IRenderElement;
 }>();
 </script>

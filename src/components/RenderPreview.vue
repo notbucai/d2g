@@ -94,7 +94,7 @@ const renderSortable = async () => {
         type: config?.type ?? ElementType.Component,
         element,
         attrs: config?.data ?? {},
-        children: {},
+        subChildrenMap: {},
       } as IRenderElement;
       const listValue = [...list.value];
       listValue.splice(newIndex, 0, re);

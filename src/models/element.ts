@@ -8,5 +8,5 @@ export interface IRenderElement {
   element: string;
   type?: ElementType; // 元素类型
   attrs?: Record<string, unknown>;
-  children?: Record<string, IRenderElement[]>;
+  subChildrenMap?: Record<string, IRenderElement[]>;
 }

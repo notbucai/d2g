@@ -29,19 +29,19 @@ import { computed } from "vue";
 
 const props = defineProps<{
   tabs?: any[];
-  children?: Record<string, IRenderElement[]>;
+  subChildrenMap?: Record<string, IRenderElement[]>;
 }>();
 
 const active = ref(0);
 
 const tabChild = computed({
   get() {
-    // console.log(props.children, active.value);
-    return props.children?.[active.value] || [];
+    // console.log(props.subChildrenMap, active.value);
+    return props.subChildrenMap?.[active.value] || [];
   },
   set(v) {
-    if (props.children) {
-      props.children[active.value] = v;
+    if (props.subChildrenMap) {
+      props.subChildrenMap[active.value] = v;
     }
   },
 });

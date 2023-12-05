@@ -14,6 +14,7 @@ export const usePreviewStore = defineStore("preview", {
           name: "不才",
           tel: "13000000000",
         },
+        subChildrenMap: {},
       },
       {
         id: "grid-test",
@@ -34,6 +35,7 @@ export const usePreviewStore = defineStore("preview", {
             },
           ],
         },
+        subChildrenMap: {},
       },
       {
         id: "test",
@@ -54,7 +56,7 @@ export const usePreviewStore = defineStore("preview", {
             },
           ],
         },
-        children: {},
+        subChildrenMap: {},
       },
       {
         id: "text1",
@@ -62,6 +64,7 @@ export const usePreviewStore = defineStore("preview", {
         attrs: {
           text: "测试文本1",
         },
+        subChildrenMap: {},
       },
 
       {
@@ -70,7 +73,7 @@ export const usePreviewStore = defineStore("preview", {
         attrs: {
           title: "卡片标题",
         },
-        children: {
+        subChildrenMap: {
           card: [
             {
               id: "text-card",
@@ -96,7 +99,7 @@ export const usePreviewStore = defineStore("preview", {
             },
           ],
         },
-        children: {
+        subChildrenMap: {
           0: [
             {
               id: "textfa",

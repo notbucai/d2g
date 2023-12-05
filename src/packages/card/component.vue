@@ -15,16 +15,16 @@ import { computed } from "vue";
 
 const props = defineProps<{
   title?: string;
-  children?: Record<string, IRenderElement[]>;
+  subChildrenMap?: Record<string, IRenderElement[]>;
 }>();
 
 const cardChild = computed({
   get() {
-    return props.children?.["card"] || [];
+    return props.subChildrenMap?.["card"] || [];
   },
   set(v) {
-    if (props.children) {
-      props.children["card"] = v;
+    if (props.subChildrenMap) {
+      props.subChildrenMap["card"] = v;
     }
   },
 });
