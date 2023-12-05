@@ -13,7 +13,6 @@
         :key="item.element"
         data-type="component"
         :data-element="item.element"
-        :data-name="item.name"
       >
         <div class="component-info">
           <div class="component-info-icon" v-if="item.icon">
@@ -40,17 +39,25 @@ const components = getComponents();
 
 onMounted(() => {
   if (!componentListRef.value) return;
-  Sortable.create(componentListRef.value, {
-    animation: 150,
+  const s = new Sortable(componentListRef.value, {
+    // animation: 150,
     sort: false,
+    // swapThreshold: 1,
+    // invertSwap: true,
+    // ghostClass: "d2g-ghost",
+    // dragClass: "111",
+    // chosenClass: "123123",
+    // fallbackOnBody: true,
+    direction: "vertical",
     group: {
       name: "d2g",
       pull: "clone",
       put: false,
     },
   });
+  console.log('s', s);
+  
 });
-
 </script>
 
 <style lang="scss" scoped>
@@ -83,12 +90,10 @@ onMounted(() => {
   background-color: #fafafa;
   overflow-y: auto;
   overflow-x: hidden;
+  // padding: 12px;
   .component-item {
-    box-sizing: border-box;
+    // box-sizing: border-box;
     padding: 10px 12px;
-    margin: 6px 12px;
-    user-select: none;
-    cursor: move;
     background-color: #fff;
     border-radius: 4px;
     .component-info {
@@ -111,7 +116,6 @@ onMounted(() => {
     .component-ghost {
       display: none;
     }
-    
   }
 }
 </style>

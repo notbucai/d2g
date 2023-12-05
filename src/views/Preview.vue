@@ -1,6 +1,6 @@
 <template>
   <div class="preview-container">
-    <RenderPreview v-model:data="useData.nodes" style="min-height: 100vh;" :key="useData.keyId"></RenderPreview>
+    <RenderPreview v-model:data="useData.nodes" style="min-height: 100vh;box-sizing: border-box;"></RenderPreview>
   </div>
 </template>
 

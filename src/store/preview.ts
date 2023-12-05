@@ -12,8 +12,8 @@ export const usePreviewStore = defineStore("preview", {
 
   actions: {
     updateNodes(nodes: IRenderElement[]) {
-      this.nodes = nodes;
       this.keyId++;
+      this.nodes = nodes;
     },
     selectNode(node?: IRenderElement) {
       this.selectionId = node?.id || null;

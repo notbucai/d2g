@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list" ref="previewListRef" :key="keyId" :style="style">
+  <div class="preview-list" ref="previewListRef" :key="keyId">
     <template v-for="item in list" :key="item.id">
       <RenderPreviewElement
         :element="item"
@@ -16,6 +16,7 @@ import { ElementType, IRenderElement } from "../models/element";
 import SortableType from "sortablejs";
 import { computed } from "vue";
 import { getComponents } from "../packages";
+import { nextTick } from "vue";
 
 const previewListRef = ref<HTMLElement | null>(null);
 
@@ -47,7 +48,6 @@ const onChangeItem = (item: IRenderElement, value: IRenderElement) => {
   if (index === -1) return;
   listValue.splice(index, 1, value);
   list.value = listValue;
-
   renderSortable();
 };
 
@@ -63,22 +63,18 @@ const renderSortable = async () => {
 
   keyId.value += 1;
 
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(null);
-    }, 0);
-  });
+  await nextTick();
 
   if (!previewListRef.value) return;
 
-  sortable = Sortable.create(previewListRef.value, {
+  sortable = new Sortable(previewListRef.value, {
     // bug: https://github.com/SortableJS/Sortable/issues/1707
     // fix: 约等于没有解决
-    animation: 50,
+    animation: -1,
     ghostClass: "preview-ghost",
     group: "d2g",
-    // forceAutoScrollFallback: true,
-    // fallbackOnBody: true,
+    direction: "vertical",
+
     onAdd(evt) {
       const { item, newIndex } = evt;
       const dataset = item.dataset;
@@ -104,7 +100,7 @@ const renderSortable = async () => {
       renderSortable();
     },
     onMove(evt) {
-      // console.log(evt);
+      console.log('onMove->', evt);
       // 如果来源不是自己或组件库，则禁止拖拽
       if (evt.from !== evt.to) {
         return false;
@@ -125,6 +121,9 @@ const renderSortable = async () => {
       renderSortable();
     },
   });
+
+  console.log('sortable', sortable);
+  
 };
 
 onMounted(() => {
@@ -138,5 +137,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .preview-list {
+  // min-height: 100px;
+  &:empty {
+    min-height: 200px;
+  }
 }
 </style>

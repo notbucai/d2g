@@ -43,6 +43,7 @@ const elementEl = ref<InstanceType<typeof RenderElementVue> | null>(null);
 const rect = ref<DOMRect | null>(null);
 
 const resize = () => {
+  console.log('resize');
   const el = elementEl.value?.$el;
   if (!(el instanceof HTMLElement)) {
     return false;
