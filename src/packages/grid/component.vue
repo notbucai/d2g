@@ -1,8 +1,30 @@
 <template>
-  <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-    <van-swipe-item>1</van-swipe-item>
-    <van-swipe-item>2</van-swipe-item>
-    <van-swipe-item>3</van-swipe-item>
-    <van-swipe-item>4</van-swipe-item>
-  </van-swipe>
+  <div class="grid-comp">
+    <van-grid :column-num="3">
+      <van-grid-item
+        v-for="(item, index) in list"
+        :key="index"
+        :icon="item.image"
+        :text="item.title"
+      />
+    </van-grid>
+    <div class="grid-comp-empty" v-if="!list?.length">请在右侧进行配置</div>
+  </div>
 </template>
+
+<script lang="ts" setup>
+
+defineProps<{
+  list: any[];
+}>();
+
+</script>
+
+<style lang="scss" scoped>
+.grid-comp-empty {
+  padding: 20px;
+  text-align: center;
+  color: #999;
+}
+</style>
+

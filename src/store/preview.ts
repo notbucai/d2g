@@ -8,6 +8,34 @@ export const usePreviewStore = defineStore("preview", {
     selectionId: null as string | null,
     nodes: [
       {
+        id: "address",
+        element: "d2g-address",
+        attrs: {
+          name: "不才",
+          tel: "13000000000",
+        },
+      },
+      {
+        id: "grid-test",
+        element: "d2g-grid",
+        attrs: {
+          list: [
+            {
+              title: "标题1",
+              image: "https://picsum.photos/300/200?random=1",
+            },
+            {
+              title: "标题2",
+              image: "https://picsum.photos/300/200?random=2",
+            },
+            {
+              title: "标题3",
+              image: "https://picsum.photos/300/200?random=3",
+            },
+          ],
+        },
+      },
+      {
         id: "test",
         element: "d2g-banner",
         attrs: {
@@ -40,12 +68,12 @@ export const usePreviewStore = defineStore("preview", {
         id: "card-1",
         element: "d2g-card",
         attrs: {
-          title: "123123",
+          title: "卡片标题",
         },
         children: {
           card: [
             {
-              id: "text1",
+              id: "text-card",
               element: "d2g-text",
               attrs: {
                 text: "测试文本1",
