@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list" ref="previewListRef" :class="{empty: !list?.length}" :key="keyId" :style="style">
+  <div class="preview-list" ref="previewListRef" :key="keyId" :style="style">
     <template v-for="item in list" :key="item.id">
       <RenderPreviewElement
         :element="item"
@@ -74,11 +74,11 @@ const renderSortable = async () => {
   sortable = Sortable.create(previewListRef.value, {
     // bug: https://github.com/SortableJS/Sortable/issues/1707
     // fix: 约等于没有解决
-    animation: 0,
+    animation: 50,
     ghostClass: "preview-ghost",
     group: "d2g",
-    forceAutoScrollFallback: true,
-    fallbackOnBody: true,
+    // forceAutoScrollFallback: true,
+    // fallbackOnBody: true,
     onAdd(evt) {
       const { item, newIndex } = evt;
       const dataset = item.dataset;
@@ -138,12 +138,5 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .preview-list {
-  &.empty {
-    text-align: center;
-    padding: 20px;
-    font-size: 14px;
-    color: #999;
-    border: 1px dashed #ccc;
-  }
 }
 </style>

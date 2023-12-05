@@ -60,9 +60,13 @@ onMounted(() => {
     return;
   }
   const el = elementEl.value?.$el;
+  let timer: any = null;
   // change size
   resizeObserver = new ResizeObserver(() => {
-    resize();
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      resize();
+    }, 100);
   });
   resizeObserver.observe(el);
 });
