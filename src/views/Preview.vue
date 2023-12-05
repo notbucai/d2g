@@ -32,7 +32,6 @@ watch(
 watch(
   () => useData.selection,
   (selection) => {
-    console.log("selection -> ", selection, parentWindow);
     parentWindow.postMessage(
       {
         type: "selection",

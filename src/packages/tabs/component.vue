@@ -36,7 +36,7 @@ const active = ref(0);
 
 const tabChild = computed({
   get() {
-    console.log(props.children, active.value);
+    // console.log(props.children, active.value);
     return props.children?.[active.value] || [];
   },
   set(v) {

@@ -93,7 +93,7 @@ const renderSortable = async () => {
         id: Math.random().toString(),
         type: config?.type ?? ElementType.Component,
         element,
-        data: config?.data ?? {},
+        attrs: config?.data ?? {},
         children: {},
       } as IRenderElement;
       const listValue = [...list.value];

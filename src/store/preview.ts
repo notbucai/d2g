@@ -11,26 +11,65 @@ export const usePreviewStore = defineStore("preview", {
         id: "test",
         element: "d2g-banner",
         attrs: {
-          list: [],
+          list: [
+            {
+              title: "标题1",
+              image: "https://picsum.photos/300/200?random=1",
+            },
+            {
+              title: "标题2",
+              image: "https://picsum.photos/300/200?random=2",
+            },
+            {
+              title: "标题3",
+              image: "https://picsum.photos/300/200?random=3",
+            },
+          ],
         },
         children: {},
+      },
+      {
+        id: 'text1',
+        element: 'd2g-text',
+        attrs: {
+          text: '测试文本1',
+        },
       },
       {
         id: "test2",
         element: "d2g-tabs",
         type: ElementType.Layout,
         attrs: {
-          tabs:[
+          tabs: [
             {
-              name: 'test',
+              name: "标签1",
             },
             {
-              name: 'test2',
+              name: "标签2",
             },
           ],
         },
-        children: {},
-      }
+        children: {
+          0: [
+            {
+              id: 'textfa',
+              element: 'd2g-text',
+              attrs: {
+                text: '测试文本2',
+              },
+            },
+          ],
+          1: [
+            {
+              id: 'text77',
+              element: 'd2g-text',
+              attrs: {
+                text: '测试文本4',
+              },
+            },
+          ],
+        },
+      },
     ] as IRenderElement[],
 
     selection: null as IRenderElement | null,
@@ -45,8 +84,8 @@ export const usePreviewStore = defineStore("preview", {
       this.selection = node || null;
     },
     updateSelectionNode(node: IRenderElement) {
-      if(!this.selection){
-        console.warn('updateSelectionNode: no selection');
+      if (!this.selection) {
+        console.warn("updateSelectionNode: no selection");
         return;
       }
       this.selection.attrs = node.attrs;

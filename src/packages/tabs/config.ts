@@ -21,4 +21,15 @@ export default {
       },
     },
   ],
+
+  data: {
+    tabs: [
+      {
+        name: '标签1',
+      },
+      {
+        name: '标签2',
+      },
+    ],
+  },
 }

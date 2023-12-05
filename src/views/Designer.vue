@@ -47,7 +47,6 @@ window.addEventListener("message", (e) => {
   const type = e.data?.type;
   const data = e.data?.data;
   if (type === "selection") {
-    console.log('selection', data);
     useData.setSelection(data);
   }
 });

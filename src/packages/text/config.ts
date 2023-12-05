@@ -18,4 +18,8 @@ export default {
     },
       
   ] as Rule[],
+
+  data: {
+    text: '测试文本',
+  },
 }
