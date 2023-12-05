@@ -137,9 +137,9 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .preview-list {
-  // min-height: 100px;
   &:empty {
-    min-height: 200px;
+    min-height: 100px;
+    border: 2px dashed #ebeef5;
   }
 }
 </style>
