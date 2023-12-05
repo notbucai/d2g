@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list" ref="previewListRef" :key="keyId">
+  <div class="preview-list" ref="previewListRef" :key="keyId" :style="style">
     <template v-for="item in list" :key="item.id">
       <RenderPreviewElement
         :element="item"
@@ -10,16 +10,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, StyleValue } from "vue";
 import RenderPreviewElement from "../components/RenderPreviewElement.vue";
 import { RenderElement } from "../models/element";
 import SortableType from "sortablejs";
 import { computed } from "vue";
+import { getComponents } from "../packages";
 
 const previewListRef = ref<HTMLElement | null>(null);
 
 const props = defineProps<{
   data: RenderElement[];
+  style?: StyleValue;
 }>();
 
 const emit = defineEmits<{
@@ -48,6 +50,8 @@ const onChangeItem = (item: RenderElement, value: RenderElement) => {
 
   renderSortable();
 };
+
+const components = getComponents();
 
 const renderSortable = async () => {
   console.log("renderSortable");
@@ -82,7 +86,10 @@ const renderSortable = async () => {
       if (newIndex === undefined) return;
       const { element } = dataset;
       if (!element) return;
-      const re = new RenderElement(Math.random().toString(), element, {}, []);
+
+      const config = components.find((v) => v.element === element);
+
+      const re = new RenderElement(Math.random().toString(), element, config?.data ?? {}, []);
       const listValue = [...list.value];
       listValue.splice(newIndex, 0, re);
 

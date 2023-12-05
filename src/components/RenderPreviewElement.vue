@@ -18,10 +18,10 @@
 import { computed, onMounted, ref } from "vue";
 import { RenderElement } from "../models/element";
 import RenderElementVue from "./RenderElement.vue";
-import { useDataStore } from "../store/data";
+import { usePreviewStore } from "../store/preview";
 import { onUnmounted } from "vue";
 
-const useData = useDataStore();
+const useData = usePreviewStore();
 
 const props = defineProps<{
   element: RenderElement;

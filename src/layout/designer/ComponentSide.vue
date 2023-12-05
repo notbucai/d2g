@@ -9,7 +9,7 @@
     <div class="component-list" ref="componentListRef">
       <div
         class="component-item"
-        v-for="item in list"
+        v-for="item in components"
         :key="item.element"
         data-type="component"
         :data-element="item.element"
@@ -32,27 +32,11 @@
 <script setup lang="ts">
 import Sortable from "sortablejs";
 import { onMounted, ref } from "vue";
+import { getComponents } from "../../packages";
 
 const componentListRef = ref<HTMLElement | null>(null);
 
-const list = ref([
-  {
-    name: "商品卡片",
-    element: "van-card",
-    icon: "el-icon-postcard",
-  },
-  {
-    name: "分页",
-    element: "van-pagination",
-    icon: "el-icon-reading",
-  },
-  {
-    name: "空状态",
-    element: "van-empty",
-    icon: "el-icon-circle-plus",
-  },
-]);
-
+const components = getComponents();
 
 onMounted(() => {
   if (!componentListRef.value) return;

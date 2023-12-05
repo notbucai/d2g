@@ -1,11 +1,14 @@
 import { createApp } from "vue";
 import { createPinia } from 'pinia'
 import "./style.scss";
+import 'element-plus/dist/index.css'
 
 import App from "./App.vue";
 
 import router from "./router";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+import ElementPlus from "element-plus";
+import formCreate from '@form-create/element-ui'
 
 import vant from "vant";
 
@@ -19,6 +22,8 @@ const app = createApp(App);
 const pinia = createPinia();
 
 app.use(pinia);
+app.use(ElementPlus);
+app.use(formCreate);
 app.use(vant);
 app.use(packages);
 app.component("RenderPreview", RenderPreview);

@@ -11,21 +11,23 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@form-create/element-ui": "^3.1.26",
     "@vant/icons": "^3.0.2",
+    "element-plus": "^2.4.3",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "sortablejs": "^1.15.0",
     "vant": "^4.8.0",
-    "vue": "^3.2.47",
+    "vue": "^3.3.9",
     "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.202",
     "@types/sortablejs": "^1.15.7",
-    "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue": "^4.5.1",
     "sass": "^1.69.5",
-    "typescript": "^5.0.2",
-    "vite": "^4.3.2",
-    "vue-tsc": "^1.4.2"
+    "typescript": "^5.3.2",
+    "vite": "^5.0.4",
+    "vue-tsc": "^1.8.24"
   }
 }
