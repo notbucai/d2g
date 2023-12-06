@@ -4,14 +4,15 @@
       {{ title }}
     </div>
     <div class="card-main">
-      <RenderPreview v-model:data="cardChild" style="min-height: 120px" />
+      <ComponentRenderPreview v-model:data="cardChild" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { IRenderElement } from "../../models/element";
 import { computed } from "vue";
+import ComponentRenderPreview from "../../components/ComponentRenderPreview";
+import { IRenderElement } from "../../models/element";
 
 const props = defineProps<{
   title?: string;
@@ -40,7 +41,6 @@ const cardChild = computed({
     font-size: 16px;
     padding: 6px;
     border-bottom: 2px solid #fff;
-    
   }
   .card-main {
     min-height: 120px;

@@ -6,6 +6,10 @@
       </div>
     </div>
     <div class="designer-header-nav-right">
+      <div class="designer-header-nav-button" @click="handlePreview">
+        <!-- Save -->
+        <span>预览</span>
+      </div>
       <div class="designer-header-nav-button" @click="handleSave">
         <!-- Save -->
         <span>保存</span>
@@ -19,6 +23,11 @@ import { ElMessage } from 'element-plus';
 
 const handleSave = () => {
   ElMessage.success('保存成功');
+}
+
+const handlePreview = () => {
+  // 375 x 667 center, hide toolbar
+  window.open('/#/view', '_blank', 'width=375,height=667,top=100,left=300,toolbar=no,menubar=no,scrollbars=no,resizable=no,location=no,status=no,fullscreen=no')
 }
 
 </script>
@@ -39,9 +48,14 @@ const handleSave = () => {
       height: 100%;
     }
   }
+  .designer-header-nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
   .designer-header-nav-button {
-    padding: 6px;
-    min-width: 46px;
+    padding: 4px 6px;
+    min-width: 40px;
     text-align: center;
     border-radius: 4px;
     background-color: var(--primary-color);

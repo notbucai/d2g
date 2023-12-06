@@ -7,9 +7,12 @@
 <script setup lang="ts">
 import { watch } from "vue";
 import { usePreviewStore } from "../store/preview";
+import { provide } from "vue";
 
 const useData = usePreviewStore();
 const parentWindow = window.parent;
+
+provide('RENDER_TYPE', 'preview');
 
 window.addEventListener("message", (e) => {
   const type = e.data?.type;

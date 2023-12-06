@@ -2,11 +2,13 @@ import { createRouter, createWebHashHistory } from "vue-router";
 
 import Designer from "./views/Designer.vue";
 import Preview from "./views/Preview.vue";
+import View from "./views/View.vue";
 
 const routes = [
   { path: "/", redirect: "/designer" },
   { path: "/designer", component: Designer },
   { path: "/preview", component: Preview },
+  { path: "/view", component: View },
 ];
 
 // 3. Create the router instance and pass the `routes` option

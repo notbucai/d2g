@@ -17,6 +17,7 @@ import SortableType from "sortablejs";
 import { computed } from "vue";
 import { getComponents } from "../packages";
 import { nextTick } from "vue";
+import { watch } from "vue";
 
 const previewListRef = ref<HTMLElement | null>(null);
 
@@ -48,13 +49,14 @@ const onChangeItem = (item: IRenderElement, value: IRenderElement) => {
   if (index === -1) return;
   listValue.splice(index, 1, value);
   list.value = listValue;
-  renderSortable();
 };
 
 const components = getComponents();
 
 const renderSortable = async () => {
   console.log("renderSortable");
+
+  await nextTick();
 
   const parentWindow = window.parent;
   if (!parentWindow) return;
@@ -96,11 +98,9 @@ const renderSortable = async () => {
       listValue.splice(newIndex, 0, re);
 
       list.value = listValue;
-
-      renderSortable();
     },
     onMove(evt) {
-      console.log('onMove->', evt);
+      console.log("onMove->", evt);
       // 如果来源不是自己或组件库，则禁止拖拽
       if (evt.from !== evt.to) {
         return false;
@@ -112,26 +112,41 @@ const renderSortable = async () => {
       if (newIndex === undefined) return;
       if (oldIndex === newIndex) return;
 
-      const listValue = list.value;
+      const listValue = [...list.value];
       const oldItem = listValue[oldIndex];
       if (!oldItem) return;
       listValue.splice(oldIndex, 1);
       listValue.splice(newIndex, 0, oldItem);
-      keyId.value += 1;
-      renderSortable();
+      list.value = listValue;
     },
   });
 
-  console.log('sortable', sortable);
-  
+  console.log("sortable", sortable);
 };
+
+watch(
+  () => list.value,
+  (newVal, oldVal) => {
+    console.log("list change", newVal, oldVal);
+    // 判断是否需要重新渲染
+    if (newVal.length !== oldVal?.length) {
+      renderSortable();
+    } else if (newVal.some((v, i) => v.id !== oldVal?.[i]?.id)) {
+      renderSortable();
+    } else if (newVal !== oldVal) {
+      renderSortable();
+    }
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+);
 
 onMounted(() => {
   const parentWindow = window.parent;
   if (!parentWindow) return;
   if (!previewListRef.value) return;
-
-  renderSortable();
 });
 </script>
 

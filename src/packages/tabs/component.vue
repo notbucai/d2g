@@ -12,20 +12,16 @@
     <div v-if="!tabs?.length" class="empty-tips"> 请进行配置 </div>
     <template v-else>
       <div class="tab-main">
-        <RenderPreview
-          v-model:data="tabChild"
-          :key="active"
-          style="min-height: 200px"
-        />
+        <ComponentRenderPreview v-model:data="tabChild" :key="active" />
       </div>
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { IRenderElement } from "../../models/element";
-import { computed } from "vue";
+import ComponentRenderPreview from "../../components/ComponentRenderPreview";
 
 const props = defineProps<{
   tabs?: any[];
@@ -36,12 +32,13 @@ const active = ref(0);
 
 const tabChild = computed({
   get() {
-    // console.log(props.subChildrenMap, active.value);
+    console.log('change tab data', ( props.subChildrenMap?.[active.value] || []).length);
     return props.subChildrenMap?.[active.value] || [];
   },
   set(v) {
     if (props.subChildrenMap) {
       props.subChildrenMap[active.value] = v;
+
     }
   },
 });
