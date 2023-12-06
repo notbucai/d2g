@@ -56,8 +56,6 @@ const components = getComponents();
 const renderSortable = async () => {
   console.log("renderSortable");
 
-  await nextTick();
-
   const parentWindow = window.parent;
   if (!parentWindow) return;
   const Sortable = (parentWindow as any).Sortable as typeof SortableType;
@@ -66,6 +64,7 @@ const renderSortable = async () => {
   keyId.value += 1;
 
   await nextTick();
+  await new Promise((resolve) => setTimeout(resolve, 0));
 
   if (!previewListRef.value) return;
 

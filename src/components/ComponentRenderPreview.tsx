@@ -11,7 +11,7 @@ export default defineComponent((props, { emit }) => {
     const subChildList = props.data as IRenderElement[];
     if (renderType === 'view') {
       // subChildList
-      return subChildList.map((subChild, index) => {
+      return subChildList.map((subChild) => {
         return h(RenderElementVue, {
           key: subChild.id,
           element: subChild,
