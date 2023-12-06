@@ -90,12 +90,13 @@ onMounted(() => {
   background-color: #fafafa;
   overflow-y: auto;
   overflow-x: hidden;
-  // padding: 12px;
+  padding: 8px;
   .component-item {
-    // box-sizing: border-box;
+    // box-sizing: border-box;s
     padding: 10px 12px;
     background-color: #fff;
     border-radius: 4px;
+    margin-bottom: 6px;
     .component-info {
       display: flex;
       align-items: center;
