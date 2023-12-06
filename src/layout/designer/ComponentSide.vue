@@ -39,7 +39,7 @@ const components = getComponents();
 
 onMounted(() => {
   if (!componentListRef.value) return;
-  const s = new Sortable(componentListRef.value, {
+  new Sortable(componentListRef.value, {
     // animation: 150,
     sort: false,
     // swapThreshold: 1,
@@ -55,7 +55,6 @@ onMounted(() => {
       put: false,
     },
   });
-  console.log('s', s);
   
 });
 </script>

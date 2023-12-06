@@ -32,7 +32,6 @@ const active = ref(0);
 
 const tabChild = computed({
   get() {
-    console.log('change tab data', ( props.subChildrenMap?.[active.value] || []).length);
     return props.subChildrenMap?.[active.value] || [];
   },
   set(v) {

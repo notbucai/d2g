@@ -99,7 +99,6 @@ const renderSortable = async () => {
       list.value = listValue;
     },
     onMove(evt) {
-      console.log("onMove->", evt);
       // 如果来源不是自己或组件库，则禁止拖拽
       if (evt.from !== evt.to) {
         return false;
@@ -120,13 +119,11 @@ const renderSortable = async () => {
     },
   });
 
-  console.log("sortable", sortable);
 };
 
 watch(
   () => list.value,
   (newVal, oldVal) => {
-    console.log("list change", newVal, oldVal);
     // 判断是否需要重新渲染
     if (newVal.length !== oldVal?.length) {
       renderSortable();
