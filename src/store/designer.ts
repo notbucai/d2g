@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import { ElementType, IRenderElement } from "../models/element";
+import { nextTick } from "vue";
 
 const cacheNodes = JSON.parse(localStorage.getItem("nodes") || "null");
 
 export const useDesignerStore = defineStore("designer", {
   state: () => ({
     previewWindow: null as Window | null,
+    previewElement: null as HTMLIFrameElement | null,
     selection: null as IRenderElement | null,
     nodes:
       cacheNodes ||
@@ -124,15 +126,25 @@ export const useDesignerStore = defineStore("designer", {
           },
         },
       ] as IRenderElement[]),
+    contextmenu: {
+      visible: false,
+      node: null as IRenderElement | null,
+      position: {
+        x: 0,
+        y: 0,
+      },
+    },
   }),
 
   getters: {},
 
   actions: {
-    setPreviewWindow(window: Window) {
+    setPreviewWindow(window: Window, previewElement: HTMLIFrameElement) {
       this.previewWindow = window;
+      this.previewElement = previewElement;
     },
     setSelection(selection: IRenderElement | null) {
+      this.hideContextMenu();
       this.selection = selection;
     },
     setNodes(nodes: IRenderElement[]) {
@@ -140,6 +152,8 @@ export const useDesignerStore = defineStore("designer", {
       localStorage.setItem("nodes", JSON.stringify(nodes));
     },
     updateNode(node: IRenderElement) {
+      this.hideContextMenu();
+
       this.setSelection(node);
       const previewWindow = this.previewWindow;
       // postMessage
@@ -165,5 +179,30 @@ export const useDesignerStore = defineStore("designer", {
         }
       );
     },
+    async showContextMenu(event: MouseEvent, node: IRenderElement) {
+      console.log("setContextMenu", event, node);
+      // 计算位置，event 为iframe中的坐标，需要转换为页面坐标
+      const { clientX, clientY } = event;
+
+      const previewElement = this.previewElement;
+      const previewRect = previewElement?.getBoundingClientRect();
+      if (!previewRect) return;
+
+      const { left, top } = previewRect;
+      const x = clientX + left;
+      const y = clientY + top;
+
+      this.contextmenu = {
+        visible: true,
+        node,
+        position: {
+          x,
+          y,
+        },
+      };
+    },
+    hideContextMenu() {
+      this.contextmenu.visible = false;
+    }
   },
 });

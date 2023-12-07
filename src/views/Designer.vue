@@ -14,6 +14,8 @@
       </div>
       <ConfigurationSide />
     </div>
+
+    <DesignerContextMenu />
   </div>
 </template>
 
@@ -25,6 +27,7 @@ import HeaderNav from "../layout/designer/HeaderNav.vue";
 import ComponentSide from "../layout/designer/ComponentSide.vue";
 import ConfigurationSide from "../layout/designer/ConfigurationSide.vue";
 import { useDesignerStore } from "../store/designer";
+import DesignerContextMenu from "../components/DesignerContextMenu.vue";
 
 const useData = useDesignerStore();
 
@@ -34,7 +37,7 @@ const previewEl = ref<HTMLIFrameElement | null>(null);
 
 watch(previewEl, (el) => {
   if (!el?.contentWindow) return;
-  useData.setPreviewWindow(el.contentWindow);
+  useData.setPreviewWindow(el.contentWindow, el);
 }, {
   immediate: true,
 });
@@ -51,6 +54,8 @@ window.addEventListener("message", (e) => {
     useData.setSelection(data);
   } else if (type === "update-nodes") {
     useData.setNodes(data);
+  } else if (type === 'contextmenu') {
+    useData.showContextMenu(data.event, data.node);
   }
 });
 

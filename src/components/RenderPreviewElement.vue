@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list-item" @click.stop="onClick">
+  <div class="preview-list-item" @click.stop="onClick" @contextmenu.stop.prevent="onContextMenu">
     <div
       class="preview-item-mark"
       :style="{
@@ -83,6 +83,11 @@ const onClick = () => {
   }
   useData.selectNode(node);
 };
+
+const onContextMenu = (event: MouseEvent) => {
+  useData.contextMenuNode(props.element, event);
+}
+
 </script>
 
 <style lang="scss" scoped>
