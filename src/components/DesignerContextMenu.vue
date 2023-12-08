@@ -1,7 +1,7 @@
 <template>
   <div
     class="designer-context-menu-container"
-    @click.stop.capture
+    @click.stop
     :class="{ active: contextmenu.visible }"
     :style="{
       left: contextmenu.position.x + 'px',
@@ -9,9 +9,15 @@
     }"
   >
     <div class="designer-context-menu">
-      <div class="designer-context-menu-item">删除模块</div>
-      <div class="designer-context-menu-item">上移模块</div>
-      <div class="designer-context-menu-item">下移模块</div>
+      <div class="designer-context-menu-item" @click="handleExec('del')">
+        删除模块
+      </div>
+      <div class="designer-context-menu-item" @click="handleExec('up')">
+        上移模块
+      </div>
+      <div class="designer-context-menu-item" @click="handleExec('down')">
+        下移模块
+      </div>
     </div>
   </div>
 </template>
@@ -30,6 +36,12 @@ onMounted(() => {
     useData.hideContextMenu();
   });
 });
+
+const handleExec = (type: string) => {
+  console.log("handleExec", type);
+  useData.execContextMenu(type);
+  useData.hideContextMenu();
+};
 </script>
 
 <style lang="scss" scoped>

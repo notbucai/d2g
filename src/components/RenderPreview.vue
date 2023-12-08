@@ -104,6 +104,9 @@ const renderSortable = async () => {
         return false;
       }
     },
+    // TODO: 拖拽谁就选中谁
+    // onStart(evt) {
+    // },
     onEnd(evt) {
       const { oldIndex, newIndex } = evt;
       if (oldIndex === undefined) return;

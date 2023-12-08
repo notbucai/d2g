@@ -206,5 +206,8 @@ export const useDesignerStore = defineStore("designer", {
     hideContextMenu() {
       this.contextmenu.visible = false;
     },
+    execContextMenu(type: string) {
+      this.ipc?.send("exec-contextmenu", { type, node: this.contextmenu.node });
+    },
   },
 });
