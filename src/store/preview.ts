@@ -125,6 +125,7 @@ export const usePreviewStore = defineStore("preview", {
     execContextmenu(type: string, node: IRenderElement) {
       // del up down
       if (type === "del") {
+        this.selectNode();
         this.delNode(node);
       } else if (type === "up") {
         this.upNode(node);

@@ -131,8 +131,8 @@ export const useDesignerStore = defineStore("designer", {
       visible: false,
       node: null as IRenderElement | null,
       position: {
-        x: 0,
-        y: 0,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
       },
     },
   }),
