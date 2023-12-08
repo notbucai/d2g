@@ -1,11 +1,18 @@
 <template>
-  <div class="preview-list-item" :data-id="element.id" @click.stop="onClick" @contextmenu.stop.prevent="onContextMenu">
+  <div
+    class="preview-list-item"
+    :data-id="element.id"
+    @click.stop="onClick"
+    @contextmenu.stop.prevent="onContextMenu"
+  >
     <div
       class="preview-item-mark"
+      @click.stop="onClick"
       :style="{
+        position: isFloat ? 'fixed' : 'absolute',
         width: rect?.width + 'px',
         height: rect?.height + 'px',
-        // top: rect?.top + 'px',
+        top: isFloat ? rect?.top + 'px' : undefined,
         left: rect?.left + 'px',
       }"
       :class="{ 'is-active': isActive }"
@@ -35,6 +42,10 @@ const isLayout = computed(() => {
   return props.element.type === ElementType.Layout;
 });
 
+const isFloat = computed(() => {
+  return props.element.type === ElementType.Float;
+});
+
 const isActive = computed(() => {
   return useData.selectionId === props.element.id;
 });
@@ -43,7 +54,7 @@ const elementEl = ref<InstanceType<typeof RenderElementVue> | null>(null);
 const rect = ref<DOMRect | null>(null);
 
 const resize = () => {
-  console.log('resize');
+  console.log("resize");
   const el = elementEl.value?.$el;
   if (!(el instanceof HTMLElement)) {
     return false;
@@ -54,7 +65,7 @@ const resize = () => {
 };
 
 let resizeObserver: ResizeObserver;
-
+let floatTimer: any = null;
 onMounted(() => {
   const status = resize();
   if (!status) {
@@ -70,10 +81,18 @@ onMounted(() => {
     }, 100);
   });
   resizeObserver.observe(el);
+
+  if (isFloat.value) {
+    clearInterval(floatTimer);
+    floatTimer = setInterval(() => {
+      resize();
+    }, 300);
+  }
 });
 
 onUnmounted(() => {
   resizeObserver?.disconnect();
+  clearInterval(floatTimer);
 });
 
 const onClick = () => {
@@ -86,8 +105,7 @@ const onClick = () => {
 
 const onContextMenu = (event: MouseEvent) => {
   useData.contextMenuNode(props.element, event);
-}
-
+};
 </script>
 
 <style lang="scss" scoped>

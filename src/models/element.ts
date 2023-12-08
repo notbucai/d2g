@@ -1,6 +1,7 @@
 export enum ElementType {
   Layout = 'layout',
   Component = 'component',
+  Float = 'float',
 }
 
 export interface IRenderElement {
