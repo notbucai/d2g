@@ -21,10 +21,13 @@ export default {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
 
-      const name = key.split("/")[1];
-      const module = modules[key] as any;
-      if (!module) continue;
-      app.component(`d2g-${name}`, module.default);
+      const keyName = key.split("/")[1];
+      const compName = `d2g-${keyName}`
+      const exportModule = modules[key] as any;
+      if (!exportModule) continue;
+      const module = exportModule.default;
+      module.name = compName;
+      app.component(compName, module);
     }
   },
 };
