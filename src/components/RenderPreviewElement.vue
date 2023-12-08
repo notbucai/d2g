@@ -101,5 +101,8 @@ const onContextMenu = (event: MouseEvent) => {
     border: 2px dashed rgba($color: #409eff, $alpha: 0.5);
     background-color: rgba($color: #fff, $alpha: 0.5);
   }
+  &.is-active {
+    border-style: solid;
+  }
 }
 </style>

@@ -24,7 +24,7 @@ defineProps<{
   height: 200px;
   width: 100%;
   color: #000;
-  background-color: #f0f;
+  background-color: #f4f5f6;
   // 文字描边、
   text-shadow: 0 0 1px 1px #000;
   font-size: 20px;
@@ -33,28 +33,14 @@ defineProps<{
   justify-content: center;
   box-sizing: border-box;
   img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
   }
   &.empty {
     background-color: #f4f5f6 !important;
     color: #666;
     font-size: 14px;
-  }
-
-  // 随机几种颜色
-  &:nth-child(1) {
-    background-color: #ff0;
-  }
-  &:nth-child(2) {
-    background-color: #0f0;
-  }
-  &:nth-child(3) {
-    background-color: #00f;
-  }
-  &:nth-child(4) {
-    background-color: #0ff;
   }
 }
 </style>
