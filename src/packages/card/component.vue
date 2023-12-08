@@ -44,6 +44,8 @@ const cardChild = computed({
   }
   .card-main {
     min-height: 120px;
+    padding: 12px;
+    box-sizing: border-box;
   }
 }
 </style>
