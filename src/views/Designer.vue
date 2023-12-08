@@ -47,18 +47,6 @@ const onLoadIframe = () => {
   useData.initPreviewData();
 };
 
-window.addEventListener("message", (e) => {
-  const type = e.data?.type;
-  const data = e.data?.data;
-  if (type === "selection") {
-    useData.setSelection(data);
-  } else if (type === "update-nodes") {
-    useData.setNodes(data);
-  } else if (type === 'contextmenu') {
-    useData.showContextMenu(data.event, data.node);
-  }
-});
-
 </script>
 
 <style lang="scss" scoped>

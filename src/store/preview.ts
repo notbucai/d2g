@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import { IRenderElement } from "../models/element";
 import { nextTick } from "vue";
+import { PostMessageIpc } from "../common/ipc";
 
 export const usePreviewStore = defineStore("preview", {
   state: () => ({
@@ -9,6 +10,8 @@ export const usePreviewStore = defineStore("preview", {
     keyId: 0,
 
     selection: null as IRenderElement | null,
+
+    ipc: null as PostMessageIpc | null,
   }),
 
   getters: {
@@ -35,6 +38,16 @@ export const usePreviewStore = defineStore("preview", {
   },
 
   actions: {
+    initIpc() {
+      this.ipc = new PostMessageIpc(window, window.parent);
+
+      this.ipc?.on<IRenderElement>("update-node-config", (data) => {
+        this.updateSelectionNode(data);
+      });
+      this.ipc?.on<IRenderElement[]>("init-preview-data", (data) => {
+        this.updateNodes(data);
+      });
+    },
     updateNodes(nodes: IRenderElement[]) {
       this.keyId++;
       this.nodes = nodes;
@@ -57,19 +70,13 @@ export const usePreviewStore = defineStore("preview", {
 
       await nextTick();
       
-      window.parent.postMessage(
-        {
-          type: "contextmenu",
-          data: {
-            node: JSON.parse(JSON.stringify(node)),
-            event: {
-              clientX: event.clientX,
-              clientY: event.clientY,
-            },
-          },
+      this.ipc?.send("contextmenu", {
+        node: JSON.parse(JSON.stringify(node)),
+        event: {
+          clientX: event.clientX,
+          clientY: event.clientY,
         },
-        "*"
-      );
+      });
     },
   },
 });

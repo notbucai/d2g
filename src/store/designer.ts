@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import { ElementType, IRenderElement } from "../models/element";
-import { nextTick } from "vue";
+import { PostMessageIpc } from "../common/ipc";
 
 const cacheNodes = JSON.parse(localStorage.getItem("nodes") || "null");
 
 export const useDesignerStore = defineStore("designer", {
   state: () => ({
+    ipc: null as PostMessageIpc | null,
     previewWindow: null as Window | null,
     previewElement: null as HTMLIFrameElement | null,
     selection: null as IRenderElement | null,
@@ -139,9 +140,28 @@ export const useDesignerStore = defineStore("designer", {
   getters: {},
 
   actions: {
+    initIpc(previewWindow: Window) {
+      if (this.ipc) {
+        this.ipc.destroy();
+      }
+      this.ipc = new PostMessageIpc(window, previewWindow);
+      this.ipc.on<IRenderElement | null>("selection", (data) => {
+        this.setSelection(data);
+      });
+      this.ipc.on<IRenderElement[]>("update-nodes", (data) => {
+        this.setNodes(data);
+      });
+      this.ipc.on<{ event: MouseEvent; node: IRenderElement }>(
+        "contextmenu",
+        (data) => {
+          this.showContextMenu(data.event, data.node);
+        }
+      );
+    },
     setPreviewWindow(window: Window, previewElement: HTMLIFrameElement) {
       this.previewWindow = window;
       this.previewElement = previewElement;
+      this.initIpc(window);
     },
     setSelection(selection: IRenderElement | null) {
       this.hideContextMenu();
@@ -155,29 +175,11 @@ export const useDesignerStore = defineStore("designer", {
       this.hideContextMenu();
 
       this.setSelection(node);
-      const previewWindow = this.previewWindow;
-      // postMessage
-      previewWindow?.postMessage(
-        {
-          type: "update-node-config",
-          data: JSON.parse(JSON.stringify(node)),
-        },
-        {
-          targetOrigin: "*",
-        }
-      );
+
+      this.ipc?.send("update-node-config", node);
     },
     initPreviewData() {
-      const previewWindow = this.previewWindow;
-      previewWindow?.postMessage(
-        {
-          type: "init-preview-data",
-          data: JSON.parse(JSON.stringify(this.nodes)),
-        },
-        {
-          targetOrigin: "*",
-        }
-      );
+      this.ipc?.send("init-preview-data", this.nodes);
     },
     async showContextMenu(event: MouseEvent, node: IRenderElement) {
       console.log("setContextMenu", event, node);
@@ -203,6 +205,6 @@ export const useDesignerStore = defineStore("designer", {
     },
     hideContextMenu() {
       this.contextmenu.visible = false;
-    }
+    },
   },
 });
