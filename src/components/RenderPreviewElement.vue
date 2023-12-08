@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-list-item" @click.stop="onClick" @contextmenu.stop.prevent="onContextMenu">
+  <div class="preview-list-item" :data-id="element.id" @click.stop="onClick" @contextmenu.stop.prevent="onContextMenu">
     <div
       class="preview-item-mark"
       :style="{

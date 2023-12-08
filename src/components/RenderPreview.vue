@@ -18,8 +18,7 @@ import { computed } from "vue";
 import { getComponents } from "../packages";
 import { nextTick } from "vue";
 import { watch } from "vue";
-
-const previewListRef = ref<HTMLElement | null>(null);
+import { usePreviewStore } from "../store/preview";
 
 const props = defineProps<{
   data: IRenderElement[];
@@ -29,6 +28,10 @@ const props = defineProps<{
 const emit = defineEmits<{
   (event: "update:data", value: IRenderElement[]): void;
 }>();
+
+const useData = usePreviewStore();
+
+const previewListRef = ref<HTMLElement | null>(null);
 
 const list = computed({
   get() {
@@ -97,6 +100,8 @@ const renderSortable = async () => {
       listValue.splice(newIndex, 0, re);
 
       list.value = listValue;
+
+      useData.selectNode(re);
     },
     onMove(evt) {
       // 如果来源不是自己或组件库，则禁止拖拽
@@ -105,8 +110,12 @@ const renderSortable = async () => {
       }
     },
     // TODO: 拖拽谁就选中谁
-    // onStart(evt) {
-    // },
+    onStart(evt) {
+      const nodeId = evt.item.dataset.id;
+      const node = list.value.find((v) => v.id === nodeId);
+      if (!node) return;
+      useData.selectNode(node);
+    },
     onEnd(evt) {
       const { oldIndex, newIndex } = evt;
       if (oldIndex === undefined) return;
