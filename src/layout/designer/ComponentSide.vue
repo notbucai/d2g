@@ -2,11 +2,27 @@
   <div class="designer-component-side">
     <!-- tabs -->
     <div class="component-side-tabs">
-      <div class="component-side-tab active">组件</div>
-      <div class="component-side-tab">图层</div>
+      <div
+        class="component-side-tab"
+        :class="{ active: tab === 'component' }"
+        @click="tab = 'component'"
+      >
+        组件
+      </div>
+      <div
+        class="component-side-tab"
+        :class="{ active: tab === 'layer' }"
+        @click="tab = 'layer'"
+      >
+        图层
+      </div>
     </div>
 
-    <div class="component-list" ref="componentListRef">
+    <div
+      class="component-list"
+      ref="componentListRef"
+      v-show="tab === 'component'"
+    >
       <div
         class="component-item"
         v-for="item in components"
@@ -25,29 +41,56 @@
         </div>
       </div>
     </div>
+
+    <div class="layer-list" v-show="tab === 'layer'">
+      <!-- 根据层级调整左边距 -->
+
+      <div
+        class="layer-item"
+        v-for="item in layerList"
+        :key="item.node.id"
+        :style="{
+          marginLeft: item.level * 12 + 'px',
+        }"
+        :class="{
+          active: selection?.id === item.node.id,
+        }"
+        :data-level="item.level"
+        @click="handleLayerItemClick(item)"
+        @contextmenu.stop.prevent="onContextMenu($event, item)"
+      >
+        <div class="layer-icon" v-if="item.component?.icon">
+          <component :is="item.component?.icon" />
+        </div>
+        <div class="layer-text">
+          {{ item.component?.name || item.node.element }}
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import Sortable from "sortablejs";
-import { onMounted, ref } from "vue";
-import { getComponents } from "../../packages";
+import { onMounted, ref, computed } from "vue";
+import { useDesignerStore } from "../../store/designer";
+import {} from "vue";
+import { IRenderLayer } from "../../models/element";
+
+const useData = useDesignerStore();
+
+const tab = ref("layer");
+
+const components = computed(() => useData.components);
+const layerList = computed(() => useData.layerList);
+const selection = computed(() => useData.selection);
 
 const componentListRef = ref<HTMLElement | null>(null);
-
-const components = getComponents();
 
 onMounted(() => {
   if (!componentListRef.value) return;
   new Sortable(componentListRef.value, {
-    // animation: 150,
     sort: false,
-    // swapThreshold: 1,
-    // invertSwap: true,
-    // ghostClass: "d2g-ghost",
-    // dragClass: "111",
-    // chosenClass: "123123",
-    // fallbackOnBody: true,
     direction: "vertical",
     group: {
       name: "d2g",
@@ -55,8 +98,14 @@ onMounted(() => {
       put: false,
     },
   });
-  
 });
+
+const handleLayerItemClick = (item: IRenderLayer) => {
+  useData.selectActiveLayer(item);
+}
+const onContextMenu = (event: MouseEvent, item: IRenderLayer) => {
+  useData.onContextmenuLayer(event, item);
+};
 </script>
 
 <style lang="scss" scoped>
@@ -91,11 +140,13 @@ onMounted(() => {
   overflow-x: hidden;
   padding: 8px;
   .component-item {
-    // box-sizing: border-box;s
     padding: 10px 12px;
     background-color: #fff;
     border-radius: 4px;
     margin-bottom: 6px;
+    user-select: none;
+    box-sizing: border-box;
+
     .component-info {
       display: flex;
       align-items: center;
@@ -115,6 +166,49 @@ onMounted(() => {
     }
     .component-ghost {
       display: none;
+    }
+  }
+}
+
+.layer-list {
+  flex: 1;
+  background-color: #f6f6f6;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  .layer-item {
+    padding: 4px 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+    border: 1px solid transparent;
+
+    cursor: pointer;
+
+    transition: all 0.2s;
+
+    &:hover {
+      border: 1px solid #409eff;
+    }
+    &.active {
+      background-color: #409eff;
+      color: #fff;
+    }
+
+    .layer-icon {
+      width: 12px;
+      min-width: 12px;
+      height: 12px;
+      line-height: 1;
+    }
+    .layer-text {
     }
   }
 }

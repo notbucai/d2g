@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { IRenderElement } from "../models/element";
+import { IRenderElement, IRenderLayer } from "../models/element";
 import { nextTick } from "vue";
 import { PostMessageIpc } from "../common/ipc";
 
@@ -53,6 +53,17 @@ export const usePreviewStore = defineStore("preview", {
           this.execContextmenu(data.type, data.node);
         }
       );
+      // selection
+      this.ipc?.on<IRenderElement>("select-node", (data) => {
+        this.selectNode(data);
+      });
+      // contextmenu-layer
+      this.ipc?.on<{ event: MouseEvent; layer: IRenderLayer }>(
+        "contextmenu-layer",
+        (data) => {
+          this.contextMenuNode(data.layer.node, data.event, 'layer');
+        }
+      );
     },
     updateNodes(nodes: IRenderElement[]) {
       this.keyId++;
@@ -69,7 +80,7 @@ export const usePreviewStore = defineStore("preview", {
       }
       this.selection.attrs = node.attrs;
     },
-    async contextMenuNode(node: IRenderElement, event: MouseEvent) {
+    async contextMenuNode(node: IRenderElement, event: MouseEvent, type: string = 'node') {
       this.selectNode(node);
 
       await nextTick();
@@ -80,6 +91,7 @@ export const usePreviewStore = defineStore("preview", {
           clientX: event.clientX,
           clientY: event.clientY,
         },
+        type,
       });
     },
     getNodeParentGroup(nodeId: string) {

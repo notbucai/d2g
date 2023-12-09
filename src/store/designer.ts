@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { ElementType, IRenderElement } from "../models/element";
+import { ElementType, IRenderElement, IRenderLayer } from "../models/element";
 import { PostMessageIpc } from "../common/ipc";
+import { getComponents } from "../packages";
 
 const cacheNodes = JSON.parse(localStorage.getItem("nodes") || "null");
 
@@ -137,7 +138,37 @@ export const useDesignerStore = defineStore("designer", {
     },
   }),
 
-  getters: {},
+  getters: {
+    components() {
+      return getComponents();
+    },
+    layerList() {
+      const components = this.components;
+      // 扁平化数据
+      const result: IRenderLayer[] = [];
+
+      const walk = (node: IRenderElement, level: number, layerNode: string) => {
+        result.push({ node, level, layerNode });
+
+        Object.values(node.subChildrenMap || {}).forEach((nodes) => {
+          nodes.forEach((node, index) => {
+            walk(node, level + 1, `${layerNode}-${index}`);
+          });
+        });
+      };
+
+      this.nodes.forEach((node: IRenderElement) => {
+        walk(node, 0, "0");
+      });
+
+      result.forEach(item => {
+        const component = components.find(component => component.element === item.node.element);
+        item.component = component;
+      });
+
+      return result;
+    },
+  },
 
   actions: {
     initIpc(previewWindow: Window) {
@@ -151,10 +182,10 @@ export const useDesignerStore = defineStore("designer", {
       this.ipc.on<IRenderElement[]>("update-nodes", (data) => {
         this.setNodes(data);
       });
-      this.ipc.on<{ event: MouseEvent; node: IRenderElement }>(
+      this.ipc.on<{ event: MouseEvent; node: IRenderElement, type: string }>(
         "contextmenu",
         (data) => {
-          this.showContextMenu(data.event, data.node);
+          this.showContextMenu(data.event, data.node, data.type);
         }
       );
     },
@@ -181,7 +212,7 @@ export const useDesignerStore = defineStore("designer", {
     initPreviewData() {
       this.ipc?.send("init-preview-data", this.nodes);
     },
-    async showContextMenu(event: MouseEvent, node: IRenderElement) {
+    async showContextMenu(event: MouseEvent, node: IRenderElement, type = 'node') {
       console.log("setContextMenu", event, node);
       // 计算位置，event 为iframe中的坐标，需要转换为页面坐标
       const { clientX, clientY } = event;
@@ -190,7 +221,13 @@ export const useDesignerStore = defineStore("designer", {
       const previewRect = previewElement?.getBoundingClientRect();
       if (!previewRect) return;
 
-      const { left, top } = previewRect;
+      let { left, top } = previewRect;
+
+      if (type === 'layer') {
+        left = 0;
+        top = 0;
+      }
+
       const x = clientX + left;
       const y = clientY + top;
 
@@ -209,5 +246,17 @@ export const useDesignerStore = defineStore("designer", {
     execContextMenu(type: string) {
       this.ipc?.send("exec-contextmenu", { type, node: this.contextmenu.node });
     },
+    selectActiveLayer(layer: IRenderLayer) {
+      this.ipc?.send("select-node", layer.node);
+    },
+    onContextmenuLayer(event: MouseEvent, layer: IRenderLayer) {
+      this.ipc?.send("contextmenu-layer", {
+        event: {
+          clientX: event.clientX,
+          clientY: event.clientY,
+        },
+        layer,
+      });
+    }
   },
 });

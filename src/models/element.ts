@@ -1,3 +1,5 @@
+import { IComponent } from "../packages";
+
 export enum ElementType {
   Layout = 'layout',
   Component = 'component',
@@ -10,4 +12,11 @@ export interface IRenderElement {
   type?: ElementType; // 元素类型
   attrs?: Record<string, unknown>;
   subChildrenMap?: Record<string, IRenderElement[]>;
+}
+
+export interface IRenderLayer {
+  layerNode: string;
+  level: number;
+  node: IRenderElement;
+  component?: IComponent;
 }
