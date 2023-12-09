@@ -52,7 +52,7 @@ const handleExec = (type: string) => {
   transform: scale(0);
   left: 100px;
   top: 100px;
-  transition: all 0.3s;
+  transition: all 0.1s;
   &.active {
     width: auto;
     height: auto;

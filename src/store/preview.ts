@@ -35,6 +35,24 @@ export const usePreviewStore = defineStore("preview", {
 
       return list;
     },
+    nodeList(): IRenderElement[] {
+      // 找到所有的包含子节点的节点，多级
+      const list: IRenderElement[] = [];
+      const find = (nodes: IRenderElement[]) => {
+        nodes.forEach((node) => {
+          list.push(node);
+          if (!node.subChildrenMap) return;
+          Object.keys(node.subChildrenMap).forEach((key) => {
+            if (!node.subChildrenMap?.[key]?.length) return;
+            find(node.subChildrenMap[key]);
+          });
+        });
+      };
+
+      find(this.nodes);
+
+      return list;
+    }
   },
 
   actions: {
@@ -71,7 +89,8 @@ export const usePreviewStore = defineStore("preview", {
     },
     selectNode(node?: IRenderElement) {
       this.selectionId = node?.id || null;
-      this.selection = node || null;
+      const storeNode = this.nodeList.find((item) => item.id === this.selectionId);
+      this.selection = storeNode || null;
     },
     updateSelectionNode(node: IRenderElement) {
       if (!this.selection) {
