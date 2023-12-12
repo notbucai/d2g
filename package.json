@@ -14,6 +14,7 @@
     "@form-create/element-ui": "^3.1.26",
     "@vant/icons": "^3.0.2",
     "element-plus": "^2.4.3",
+    "i-devices": "^0.1.4",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "sortablejs": "^1.15.0",

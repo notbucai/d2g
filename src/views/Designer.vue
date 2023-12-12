@@ -5,12 +5,17 @@
     <div class="designer-main">
       <ComponentSide />
       <div class="preview-iframe">
-        <iframe
-          src="/#/preview"
-          frameborder="0"
-          ref="previewEl"
-          @load="onLoadIframe"
-        ></iframe>
+        <i-devices modelbar="true" scale="0.8">
+          <iframe
+            src="/#/preview"
+            frameborder="0"
+            ref="previewEl"
+            @load="onLoadIframe"
+            slot="slot-screen"
+            
+            class="preview-iframe-content"
+          ></iframe>
+        </i-devices>
       </div>
       <ConfigurationSide />
     </div>
@@ -20,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import 'i-devices';
 import Sortable from "sortablejs";
 import { ref, watch } from "vue";
 
@@ -35,18 +41,21 @@ const useData = useDesignerStore();
 
 const previewEl = ref<HTMLIFrameElement | null>(null);
 
-watch(previewEl, (el) => {
-  if (!el?.contentWindow) return;
-  useData.setPreviewWindow(el.contentWindow, el);
-}, {
-  immediate: true,
-});
+watch(
+  previewEl,
+  (el) => {
+    if (!el?.contentWindow) return;
+    useData.setPreviewWindow(el.contentWindow, el);
+  },
+  {
+    immediate: true,
+  }
+);
 
 const onLoadIframe = () => {
   console.log("onLoadIframe");
   useData.initPreviewData();
 };
-
 </script>
 
 <style lang="scss" scoped>
@@ -65,14 +74,11 @@ const onLoadIframe = () => {
   }
 }
 .preview-iframe {
-  width: 375px;
-  height: 667px;
-  box-shadow: 0 0 12px rgba(150, 150, 150, 0.1);
-  // border: 2px solid #fff;
   margin-top: 24px;
-  iframe {
+  .preview-iframe-content {
     width: 100%;
     height: 100%;
+    height: 738px;
   }
 }
 </style>
